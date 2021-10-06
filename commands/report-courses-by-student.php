@@ -5,6 +5,7 @@ use Alura\Doctrine\Entity\Student;
 use Alura\Doctrine\Entity\Course;
 use Alura\Doctrine\Entity\Phone;
 use Alura\Doctrine\Helper\EntityManagerFactory;
+use Alura\Doctrine\Repository\StudentRepository;
 use Doctrine\DBAL\Logging\DebugStack;
 
 require_once __DIR__ . '/../vendor/autoload.php';
@@ -12,12 +13,10 @@ require_once __DIR__ . '/../vendor/autoload.php';
 $entityManagerFactory = new EntityManagerFactory();
 $entityManager = $entityManagerFactory->getEntityManager();
 
+/** @var StudentRepository */
 $studentRepository = $entityManager->getRepository(Student::class);
 /** @var Student[] */
-$students = $studentRepository->findAll();
-
-$debugStack = new DebugStack();
-$entityManager->getConfiguration()->setSQLLogger($debugStack);
+$students = $studentRepository->findCoursesByStudent();
 
 foreach ($students as $student) {
     $phones = $student
@@ -37,5 +36,3 @@ foreach ($students as $student) {
 
     echo PHP_EOL;
 }
-
-print_r($debugStack);
